@@ -1,3 +1,9 @@
+import { Dashboard } from './components';
+
 export const App = () => {
-  return <>Testing</>;
+  return (
+    <div className="App">
+      <Dashboard />
+    </div>
+  );
 };
