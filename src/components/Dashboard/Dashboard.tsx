@@ -1,18 +1,18 @@
-import { useState, useEffect } from 'react';
-import { PokemonCard } from '../PokemonCard';
+import { useEffect } from 'react';
+import { Pokemon, PokemonCard } from '../PokemonCard';
 import { CombatList } from '../CombatList';
 import { APIS } from '../../api';
-
-interface Pokemon {
-  name: string;
-  img: string;
-}
+import {
+  addPokemon,
+  removePokemon,
+  selectPokemons,
+  setPokemonList,
+} from '../../store';
+import { useDispatch, useSelector } from 'react-redux';
 
 export const Dashboard = () => {
-  const [selectedPokemon, setSelectedPokemon] = useState<string[]>([]);
-  const [pokemonList, setPokemonList] = useState<
-    { name: string; img: string }[]
-  >([]);
+  const dispatch = useDispatch();
+  const pokemonList = useSelector(selectPokemons);
 
   useEffect(() => {
     const fetchPokemon = async () => {
@@ -21,18 +21,14 @@ export const Dashboard = () => {
       const formattedPokemon = data.results.map(
         (pokemon: Pokemon, index: number) => ({
           name: pokemon.name,
-          img: `${APIS.API_URL_POKE_IMG}${index + 1}.png`,
+          url: `${APIS.API_URL_POKE_IMG}${index + 1}.png`,
         }),
-      );
-      setPokemonList(formattedPokemon);
+      ) as Pokemon[];
+      dispatch(setPokemonList(formattedPokemon));
     };
 
     fetchPokemon();
-  }, []);
-
-  const handleAddToCombat = (pokemon: string) => {
-    setSelectedPokemon([...selectedPokemon, pokemon]);
-  };
+  }, [dispatch]);
 
   return (
     <div className="container mx-auto p-4">
@@ -50,13 +46,14 @@ export const Dashboard = () => {
               <PokemonCard
                 key={pokemon.name}
                 name={pokemon.name}
-                img={pokemon.img}
-                onAddToCombat={() => handleAddToCombat(pokemon.name)}
+                url={pokemon.url}
+                onAddToCombat={() => dispatch(addPokemon(pokemon.name))}
+                onRemoveFromCombat={() => dispatch(removePokemon(pokemon.name))}
               />
             ))}
           </div>
         </div>
-        <CombatList selectedPokemon={selectedPokemon} />
+        <CombatList />
       </div>
     </div>
   );
