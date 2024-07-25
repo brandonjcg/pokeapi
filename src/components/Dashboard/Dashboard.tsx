@@ -1,14 +1,16 @@
 import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import debounce from 'lodash.debounce';
+import { APIS } from '../../api';
 import { Pokemon, PokemonCard } from '../PokemonCard';
 import { CombatList } from '../CombatList';
-import { APIS } from '../../api';
 import {
   addPokemon,
+  findPokemon,
   removePokemon,
   selectPokemons,
   setPokemonList,
 } from '../../store';
-import { useDispatch, useSelector } from 'react-redux';
 
 export const Dashboard = () => {
   const dispatch = useDispatch();
@@ -23,12 +25,15 @@ export const Dashboard = () => {
           name: pokemon.name,
           url: `${APIS.API_URL_POKE_IMG}${index + 1}.png`,
         }),
-      ) as Pokemon[];
+      );
       dispatch(setPokemonList(formattedPokemon));
     };
 
     fetchPokemon();
   }, [dispatch]);
+
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) =>
+    dispatch(findPokemon(event.target.value));
 
   return (
     <div className="container mx-auto p-4">
@@ -39,6 +44,7 @@ export const Dashboard = () => {
               type="text"
               placeholder="¿Qué Pokemon buscas?"
               className="w-full p-2 border border-gray-300 rounded"
+              onChange={debounce(handleSearch, 500)}
             />
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">

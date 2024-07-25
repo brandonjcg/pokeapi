@@ -1,10 +1,22 @@
 import { Pokemon } from '../components';
-import { ADD_POKEMON, REMOVE_POKEMON, SET_POKEMON_LIST } from './constants';
+import {
+  ADD_POKEMON,
+  FIND_POKEMON,
+  REMOVE_POKEMON,
+  SET_POKEMON_LIST,
+} from './constants';
 
 export const setPokemonList = (pokemonList: Pokemon[]) => {
   return {
     type: SET_POKEMON_LIST,
     payload: pokemonList,
+  };
+};
+
+export const findPokemon = (payload: string) => {
+  return {
+    type: FIND_POKEMON,
+    payload,
   };
 };
 
