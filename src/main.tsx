@@ -19,7 +19,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   </Provider>,
 );
 
-// TODO: add X in input search
-// TODO: add unit test
 // TODO: add loading spinner
 // TODO: add dark mode
+// TODO: add aliases
