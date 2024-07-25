@@ -1,7 +1,9 @@
 import ReactDOM from 'react-dom/client';
-import { App } from './App.tsx';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
+import { BrowserRouter } from 'react-router-dom';
+
+import { App } from './App.tsx';
 import { store as PokeApiStore } from './store';
 import './index.css';
 
@@ -11,12 +13,13 @@ const store = configureStore({
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <Provider store={store}>
-    <App />
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </Provider>,
 );
 
-// TODO: mejora de front al momento de ya no poder agregar al combatList
-// TODO: add dark mode
-// TODO: filtrador por pokemon (router)
+// TODO: add X in input search
+// TODO: add unit test
 // TODO: add loading spinner
-// TODO: verificar responsive
+// TODO: add dark mode

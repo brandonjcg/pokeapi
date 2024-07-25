@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import {
   ADD_POKEMON,
+  EXISTING_POKEMON,
   FIND_POKEMON,
   REMOVE_POKEMON,
   RESET_POKEMON,
@@ -68,6 +69,8 @@ const combatList = (
       return state.filter((pokemonName) => pokemonName !== action.name);
     case RESET_POKEMON:
       return [];
+    case EXISTING_POKEMON:
+      return state.filter((pokemonName) => pokemonName !== action.name);
     default:
       return state;
   }
