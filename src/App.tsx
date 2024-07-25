@@ -1,9 +1,11 @@
-import { Dashboard } from './components';
+import { Routes, Route } from 'react-router-dom';
+import { Dashboard, PokemonPage } from './components';
 
 export const App = () => {
   return (
-    <div className="App">
-      <Dashboard />
-    </div>
+    <Routes>
+      <Route path="/" element={<Dashboard />} />
+      <Route path="/pokemon/:name" element={<PokemonPage />} />
+    </Routes>
   );
 };

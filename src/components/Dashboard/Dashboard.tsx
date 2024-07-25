@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import debounce from 'lodash.debounce';
 import { APIS } from '../../api';
 import { Pokemon, PokemonCard } from '../PokemonCard';
 import { CombatList } from '../CombatList';
+import { DashboardInput } from './DashboardInput';
 import {
   addPokemon,
   findPokemon,
@@ -18,7 +18,9 @@ export const Dashboard = () => {
 
   useEffect(() => {
     const fetchPokemon = async () => {
-      const response = await fetch(`${APIS.API_URL_POKEAPI}limit=151&offset=0`);
+      const response = await fetch(
+        `${APIS.API_URL_POKEAPI}?limit=151&offset=0`,
+      );
       const data = await response.json();
       const formattedPokemon = data.results.map(
         (pokemon: Pokemon, index: number) => ({
@@ -32,21 +34,11 @@ export const Dashboard = () => {
     fetchPokemon();
   }, [dispatch]);
 
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) =>
-    dispatch(findPokemon(event.target.value));
-
   return (
     <div className="container mx-auto p-4">
       <div className="flex flex-col md:flex-row md:space-x-4">
         <div className="flex flex-col md:w-3/4">
-          <div className="mb-4">
-            <input
-              type="text"
-              placeholder="¿Qué Pokemon buscas?"
-              className="w-full p-2 border border-gray-300 rounded"
-              onChange={debounce(handleSearch, 500)}
-            />
-          </div>
+          <DashboardInput onSearch={(value) => dispatch(findPokemon(value))} />
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
             {pokemonList.map((pokemon) => (
               <PokemonCard

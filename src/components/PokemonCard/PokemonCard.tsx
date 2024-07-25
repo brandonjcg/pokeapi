@@ -1,16 +1,14 @@
+import React, { useCallback } from 'react';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import {
   RootState,
   selectExistsInCombat,
   selectThereAreSixPokemons,
 } from '../../store';
-
-interface PokemonCardProps {
-  name: string;
-  url: string;
-  onAddToCombat: () => void;
-  onRemoveFromCombat: () => void;
-}
+import { PokemonCardProps } from './interfaces';
+import { PokemonCardButton } from './PokemonCardButton';
+import { sentenceCase } from '../../utils/index';
 
 export const PokemonCard = ({
   name,
@@ -18,31 +16,50 @@ export const PokemonCard = ({
   onAddToCombat,
   onRemoveFromCombat,
 }: PokemonCardProps) => {
+  const navigate = useNavigate();
   const existsInCombat = useSelector((state: RootState) =>
-    selectExistsInCombat(state, name),
+    selectExistsInCombat(state, String(name)),
   );
   const thereAreSixPokemons = useSelector(selectThereAreSixPokemons);
+
+  const handleCardClick = useCallback(
+    () => navigate(`/pokemon/${name}`),
+    [navigate, name],
+  );
+  const handleAddToCombat = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      onAddToCombat(e);
+    },
+    [onAddToCombat],
+  );
+  const handleRemoveFromCombat = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      onRemoveFromCombat(e);
+    },
+    [onRemoveFromCombat],
+  );
+
   return (
-    <div className="border border-gray-300 rounded p-2 text-center">
-      <img src={url} alt={name} className="w-full h-24 object-cover" />
-      <div className="mt-2 flex justify-between items-center">
-        <span>{name}</span>
-        {existsInCombat ? (
-          <button
-            onClick={onRemoveFromCombat}
-            className="bg-red-500 text-white px-2 py-1 rounded"
-          >
-            🗑️
-          </button>
-        ) : (
-          <button
-            onClick={onAddToCombat}
-            disabled={thereAreSixPokemons}
-            className="bg-blue-500 text-white rounded-full p-1"
-          >
-            ➕
-          </button>
-        )}
+    <div
+      className="relative border border-gray-300 rounded p-2 text-center"
+      onClick={handleCardClick}
+    >
+      <PokemonCardButton
+        existsInCombat={existsInCombat}
+        onAddToCombat={handleAddToCombat}
+        onRemoveFromCombat={handleRemoveFromCombat}
+        thereAreSixPokemons={thereAreSixPokemons}
+        classRequerid="absolute top-2 right-2"
+      />
+      <img
+        src={url}
+        alt={name}
+        className="w-full h-auto min-h-20 object-cover object-center"
+      />
+      <div className="mt-2 text-center">
+        <span>{sentenceCase(name)}</span>
       </div>
     </div>
   );
