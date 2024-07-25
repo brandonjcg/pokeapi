@@ -1,24 +1,54 @@
 import { combineReducers } from 'redux';
 import {
   ADD_POKEMON,
+  FIND_POKEMON,
   REMOVE_POKEMON,
   RESET_POKEMON,
   SET_POKEMON_LIST,
 } from './constants';
 import { Pokemon } from '../components';
 
+interface PokemonState {
+  allPokemons: Pokemon[];
+  filteredPokemons: Pokemon[];
+}
+
+const initialState: PokemonState = {
+  allPokemons: [],
+  filteredPokemons: [],
+};
+
 const pokemons = (
-  state: Pokemon[] = [],
+  state: PokemonState = initialState,
   action: {
     type: string;
-    payload: Pokemon[];
+    payload: Pokemon[] | string;
   },
 ) => {
   switch (action.type) {
     case SET_POKEMON_LIST:
-      return action.payload;
+      return {
+        ...state,
+        allPokemons: action.payload,
+        filteredPokemons: action.payload,
+      };
+    case FIND_POKEMON:
+      if (action.payload === '')
+        return {
+          ...state,
+          filteredPokemons: state.allPokemons,
+        };
+
+      return {
+        ...state,
+        filteredPokemons: state.allPokemons.filter((pokemon) =>
+          pokemon.name
+            .toLowerCase()
+            .includes(String(action.payload).toLowerCase()),
+        ),
+      };
     case RESET_POKEMON:
-      return [];
+      return initialState;
     default:
       return state;
   }

@@ -17,8 +17,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 
 // TODO: mejora de front al momento de ya no poder agregar al combatList
 // TODO: add dark mode
-// TODO: agregar buscardor con debounce
 // TODO: filtrador por pokemon (router)
 // TODO: add loading spinner
 // TODO: verificar responsive
-// TODO: actualizar readme
